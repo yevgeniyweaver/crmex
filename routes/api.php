@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Models\User;
+use App\Http\Controllers\Api\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,20 +22,28 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group([
-//    'namespace' => 'API\V1',
-    'prefix' => 'user',
-    'middleware' => 'auth_api', //auth:api
+    'prefix' => 'users',
+    'middleware' => 'auth:sanctum'
+    //'middleware' => 'auth_api', //auth:api
 ], function () {
-    Route::get('{id}', function ($id) {
-        $user = \App\Models\User::find($id);
-        if (!$user) {
-            return response('wrong', 404);
-        }
 
-        return $user;
-    });
-    //Route::get('show/{id}', 'SspController@show')->middleware('role:dev');
+//    Route::get('{id}', function ($id) {
+//        $user = User::find($id);
+//        if (!$user) {
+//            return response('wrong', 404);
+//        }
+//
+//        return $user;
+//    });
+    Route::get('/me', [AuthController::class, 'me']);
+    Route::get('/logout', [AuthController::class, 'logout']);
 });
+
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
+
 
 
 
